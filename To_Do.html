@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>To Do list</title>
+</head>
+
+<link rel="stylesheet" type="text/css" href="../../bootstrap/css/bootstrap.css">
+<script src="../../jquery/js/bootstrap.js"></script>
+<script src="../angular.js"></script>
+
+<script>
+	var mod= angular.module('mod',[]);
+	mod.controller('con',function($scope){
+
+		$scope.list=['to make tea','study physics','have to go gym','power nap'];
+		
+		$scope.add_item=function()
+		{	
+			//if empty input box
+			if(!$scope.get_item)
+			{	
+				return;
+			}
+
+			//if item is not present in the list then add-
+			if($scope.list.indexOf($scope.get_item)==-1)
+			{	
+				$scope.list.push($scope.get_item);
+				$scope.time=new Date().toDateString();
+				document.getElementById('success_or_duplicate').innerHTML='<b>SUCCESSFULLY ADDED !</b>';
+				document.getElementById('success_or_duplicate').style.color ='green';
+				document.getElementById('deleted').innerHTML='';
+
+			}
+
+			//if item already present in the item list
+			else 
+			{	
+				document.getElementById('success_or_duplicate').innerHTML="ITEM ALREADY PRESENT !";
+				document.getElementById('success_or_duplicate').style.color = 'red';
+				document.getElementById('deleted').innerHTML='';
+			}
+		}
+
+		$scope.del_item=function(del_id)
+		{
+			$scope.list.splice(del_id,1);
+			document.getElementById('deleted').innerHTML="<h5><i><b>SUCCESSFULLY DELETED !!</b></i></h5>";
+			document.getElementById('deleted').style.color = 'maroon';
+		}
+
+		//when input field is in focus, it clears the previous value
+		$scope.clear_space=function()
+		{	
+			document.getElementById('get_item_block').value='';
+			document.getElementById('success_or_duplicate').innerHTML='';
+			document.getElementById('deleted').innerHTML='';
+
+		}
+	});
+</script>
+
+<body>
+<div class="container"  ng-app="mod" ng-controller="con" style="background: silver">
+<br>
+<div class="col-md-8 col-md-offset-2">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h2 class="text-center"><b>TO DO LIST</b></h2></div>
+		
+		<div class="panel-body">
+			<div class="list-group" ng-repeat="x in list">
+				
+				<div class="list-group-item text-center text-uppercase" 
+				style="font-family: times; letter-spacing: 2px; font-weight: bold; font-style: italic;">
+				
+				<span class="pull-left">{{$index+1}}.</span> {{x}}
+
+				<span class="pull-right">{{time}} 
+					<span class="glyphicon glyphicon-remove"  
+					style="cursor: pointer;" title="REMOVE ITEM" ng-click="del_item($index)">	
+					</span>
+				</span>
+
+				</div>
+			
+			</div>
+		</div>
+
+		<div class="panel-footer">
+			<span class="text-center lead" id="deleted"></span>
+			<div class="form-group">
+				<input type="text" ng-model="get_item" class="form-control text-center"
+				placeholder="ENTER ITEM TO ADD TO THE LIST" id="get_item_block" ng-focus="clear_space()" required>
+				
+				<span id="success_or_duplicate" class="pull-right"></span>
+			</div>
+			
+			<button ng-click="add_item();" class="btn btn-success btn-block">ADD ITEM</button>
+		</div>
+	
+	</div>
+</div>
+
+</div>
+
+</div>
+</body>
+</html>
